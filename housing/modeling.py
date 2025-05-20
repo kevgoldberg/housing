@@ -3,7 +3,7 @@ Model training, evaluation, and inference
 """
 import numpy as np
 from sklearn.model_selection import train_test_split
-from config import SEED
+from housing.config import SEED
 from housing.data import load_data, preprocess_numeric
 from housing.visualization.runner import run_model_visualizations
 from housing.models.random_forest import train_and_evaluate_rf
@@ -46,7 +46,7 @@ def main():
     model, X_test = train_and_evaluate()
     preds = model.predict(X_test)
     import pandas as pd
-    from config import TEST_PATH
+    from housing.config import TEST_PATH
     test_df = pd.read_csv(TEST_PATH)
     submission = pd.DataFrame({'Id': test_df['Id'], 'SalePrice': preds})
     submission.to_csv('submission.csv', index=False)
