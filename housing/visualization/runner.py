@@ -67,5 +67,7 @@ def model(ctx, rf_pred, ridge_pred, y_val):
     y = np.load(y_val)
     plot_saleprice_distribution(pd.DataFrame({'SalePrice': y}))
     rf_res, ridge_res = plot_prediction_comparison(y, rf, ridge)
-    plot_residuals_distribution(rf_res, ridge_res, None, None)
+    rf_rmse = np.sqrt(((rf - y) ** 2).mean())
+    ridge_rmse = np.sqrt(((ridge - y) ** 2).mean())
+    plot_residuals_distribution(rf_res, ridge_res, rf_rmse, ridge_rmse)
     # further plots...
