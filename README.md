@@ -29,6 +29,11 @@ python main.py
 python visualization_runner.py
 ```
 
+4. Launch the simple local front end (requires Tkinter, included with Python):
+```bash
+python local_frontend.py
+```
+
 ## Data Visualization Functions
 
 The `data_visualizations.py` module provides the following visualizations:
