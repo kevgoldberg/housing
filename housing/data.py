@@ -2,7 +2,7 @@
 Data loading and preprocessing functions
 """
 import pandas as pd
-from config import TRAIN_PATH, TEST_PATH
+from housing.config import TRAIN_PATH, TEST_PATH
 
 def load_data():
     """Load training and test datasets from CSV files."""
