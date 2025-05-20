@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.inspection import PartialDependenceDisplay
-from housing.config import VIS_DIR
+from config import VIS_DIR
 
 os.makedirs(VIS_DIR, exist_ok=True)
 

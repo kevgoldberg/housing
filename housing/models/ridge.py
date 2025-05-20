@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_squared_error
-from housing.config import SEED, ALPHA_GRID
+from config import SEED, ALPHA_GRID
 
 def train_and_evaluate_ridge(X_train, y_train, X_val, y_val):
     """
