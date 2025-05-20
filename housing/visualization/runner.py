@@ -25,17 +25,25 @@ def run_model_visualizations(
     ridge_model,
     X_train,
     numeric_features,
+    gb_pred=None,
+    gb_rmse=None,
+    gb_model=None,
 ):
     """Generate all model visualizations for a validation set."""
     plot_saleprice_distribution(pd.DataFrame({"SalePrice": y_val}))
     rf_res, ridge_res = plot_prediction_comparison(y_val, rf_pred, ridge_pred)
     plot_residuals_distribution(rf_res, ridge_res, rf_rmse, ridge_rmse)
-    if rf_rmse <= ridge_rmse:
-        best_pred = rf_pred
-        best_model = rf_model
-    else:
+    best_pred = rf_pred
+    best_model = rf_model
+    best_rmse = rf_rmse
+    if ridge_rmse < best_rmse:
         best_pred = ridge_pred
         best_model = ridge_model
+        best_rmse = ridge_rmse
+    if gb_pred is not None and gb_rmse is not None and gb_rmse < best_rmse:
+        best_pred = gb_pred
+        best_model = gb_model
+        best_rmse = gb_rmse
     if hasattr(best_model, "feature_importances_"):
         plot_feature_importance(best_model, numeric_features)
         plot_partial_dependence(best_model, X_train, numeric_features)

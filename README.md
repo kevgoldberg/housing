@@ -62,4 +62,5 @@ The `model_visualizations.py` module provides the following visualizations:
 
 - Random Forest Regression
 - Ridge Regression with hyperparameter tuning
+- Gradient Boosting Regression
 

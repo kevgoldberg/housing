@@ -8,6 +8,7 @@ from housing.data import load_data, preprocess_numeric
 from housing.visualization.runner import run_model_visualizations
 from housing.models.random_forest import train_and_evaluate_rf
 from housing.models.ridge import train_and_evaluate_ridge
+from housing.models.gradient_boosting import train_and_evaluate_gb
 
 
 def train_and_evaluate(test_size=0.2):
@@ -24,6 +25,9 @@ def train_and_evaluate(test_size=0.2):
     # Ridge with normalization & grid search
     best_ridge, ridge_pred, ridge_rmse = train_and_evaluate_ridge(X_train, y_train, X_val, y_val)
 
+    # Gradient Boosting Regressor
+    gb, gb_pred, gb_rmse = train_and_evaluate_gb(X_train, y_train, X_val, y_val)
+
     # Visualize
     run_model_visualizations(
         y_val,
@@ -34,11 +38,15 @@ def train_and_evaluate(test_size=0.2):
         rf,
         best_ridge,  # Use the best ridge estimator
         X_train_all,
-        numeric_features
+        numeric_features,
+        gb_pred,
+        gb_rmse,
+        gb,
     )
 
     # Choose final model
-    final = best_ridge if ridge_rmse < rf_rmse else rf
+    rmses = [(rf_rmse, rf), (ridge_rmse, best_ridge), (gb_rmse, gb)]
+    final = min(rmses, key=lambda x: x[0])[1]
     return final, X_test
 
 
