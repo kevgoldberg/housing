@@ -44,10 +44,6 @@ def run_model_performance_visualizations(y_val, model, X_val, X_train, numeric_f
     # Feature importance for tree-based models
     if hasattr(model, 'feature_importances_'):
         mv.plot_feature_importance(model, numeric_features)
-        mv.plot_partial_dependence(model, X_train, numeric_features)
-    
-    # Outlier analysis
-    mv.plot_outlier_analysis(y_val, predictions)
 
 def run_quick_model_test(train_data, test_size=0.2):
     """Run a quick model test and visualize results"""

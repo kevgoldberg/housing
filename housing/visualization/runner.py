@@ -10,8 +10,6 @@ from housing.visualization.model import (
     plot_prediction_comparison,
     plot_residuals_distribution,
     plot_feature_importance,
-    plot_partial_dependence,
-    plot_outliers,
 )
 
 
@@ -38,8 +36,6 @@ def run_model_visualizations(
         best_model = ridge_model
     if hasattr(best_model, "feature_importances_"):
         plot_feature_importance(best_model, numeric_features)
-        plot_partial_dependence(best_model, X_train, numeric_features)
-    plot_outliers(y_val, best_pred)
 
 @click.group()
 @click.pass_context

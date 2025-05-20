@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.inspection import PartialDependenceDisplay
+
 from config import VIS_DIR
 
 os.makedirs(VIS_DIR, exist_ok=True)
@@ -59,25 +59,3 @@ def plot_feature_importance(model, features):
     plt.close()
     return importances
 
-def plot_partial_dependence(model, X_train, features):
-    top = plot_feature_importance(model, features).index[:6]
-    fig, ax = plt.subplots(2,3,figsize=(18,10))
-    PartialDependenceDisplay.from_estimator(model, X_train, top, ax=ax.flatten())
-    plt.tight_layout()
-    plt.savefig(os.path.join(VIS_DIR,'partial_dependence.png'))
-    plt.close()
-
-def plot_outliers(y_val, pred):
-    res = y_val - pred
-    idx = np.argsort(np.abs(res))[-20:]
-    df = pd.DataFrame({'Actual': y_val.iloc[idx], 'Pred': pred[idx], 'Res': res.iloc[idx]})
-    df = df.sort_values('Res', key=abs)
-    plt.figure(figsize=(12,8))
-    i = np.arange(len(df))
-    plt.bar(i-0.2, df['Actual'], width=0.4, label='Actual')
-    plt.bar(i+0.2, df['Pred'], width=0.4, label='Pred')
-    plt.legend()
-    plt.title('Top 20 Outliers')
-    plt.tight_layout()
-    plt.savefig(os.path.join(VIS_DIR,'outliers.png'))
-    plt.close()

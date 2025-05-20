@@ -10,7 +10,6 @@ The project is organized into the following modules:
 - `data_visualizations.py`: Module containing functions for visualizing the housing data.
 - `model_visualizations.py`: Module containing functions for visualizing model performance and predictions.
 - `visualization_runner.py`: Unified interface to run all visualizations in one go.
-- `enhanced_visualizations.py`: Additional complex visualizations (legacy).
 
 ## Getting Started
 
@@ -36,11 +35,7 @@ The `data_visualizations.py` module provides the following visualizations:
 - Correlation heatmap of top features
 - Scatter plots of top correlated features with the target variable
 - Distribution plots of top features
-- Price by house age
-- Price by quality and condition ratings
 - Neighborhood price comparison
-- Living area vs. price by neighborhood
-- Price by building type
 
 ## Model Visualization Functions
 
@@ -50,8 +45,6 @@ The `model_visualizations.py` module provides the following visualizations:
 - Model predictions vs. actual values
 - Residuals analysis
 - Feature importance for tree-based models
-- Outlier analysis
-- Partial dependence plots
 
 ## Directory Structure
 

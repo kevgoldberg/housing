@@ -76,58 +76,6 @@ def create_feature_distribution_plots(train_data):
     plt.close()
     print("Feature distribution plots saved to visualizations/feature_distributions.png")
 
-def create_price_by_age(train_data):
-    """Create boxplot of price by house age groups"""
-    print("Generating price by house age plot...")
-    if 'YearBuilt' in train_data.columns:
-        # Create age bands
-        current_year = 2025  # Using current year 
-        age_data = train_data.copy()
-        age_data['HouseAge'] = current_year - age_data['YearBuilt']
-        
-        age_bins = [0, 10, 20, 40, 60, 80, 100, 150]
-        age_labels = ['0-10', '11-20', '21-40', '41-60', '61-80', '81-100', '100+']
-        
-        age_data['AgeGroup'] = pd.cut(age_data['HouseAge'], bins=age_bins, labels=age_labels)
-        
-        # Plot
-        plt.figure(figsize=(12, 8))
-        sns.boxplot(x='AgeGroup', y='SalePrice', data=age_data)
-        plt.title('House Price Distribution by Age Group', fontsize=16)
-        plt.xlabel('House Age (years)')
-        plt.ylabel('Sale Price ($)')
-        plt.tight_layout()
-        plt.savefig('visualizations/price_by_age.png')
-        plt.close()
-        print("Price by house age plot saved to visualizations/price_by_age.png")
-    else:
-        print("YearBuilt column not found in data")
-
-def create_quality_condition_plot(train_data):
-    """Create heatmap of price by quality and condition ratings"""
-    print("Generating quality and condition plot...")
-    if 'OverallQual' in train_data.columns and 'OverallCond' in train_data.columns:
-        # Create a pivot table of average price by quality and condition
-        pivot = train_data.pivot_table(
-            values='SalePrice', 
-            index='OverallQual', 
-            columns='OverallCond', 
-            aggfunc='mean'
-        )
-        
-        # Plot heatmap
-        plt.figure(figsize=(12, 10))
-        sns.heatmap(pivot, annot=True, fmt='.0f', cmap='viridis')
-        plt.title('Average House Price by Quality and Condition', fontsize=16)
-        plt.xlabel('Overall Condition (1-10)')
-        plt.ylabel('Overall Quality (1-10)')
-        plt.tight_layout()
-        plt.savefig('visualizations/price_by_quality_condition.png')
-        plt.close()
-        print("Quality and condition plot saved to visualizations/price_by_quality_condition.png")
-    else:
-        print("OverallQual or OverallCond columns not found in data")
-
 def create_neighborhood_comparison(train_data):
     """Create bar chart of average price by neighborhood"""
     print("Generating neighborhood comparison...")
@@ -161,63 +109,12 @@ def create_neighborhood_comparison(train_data):
     else:
         print("Neighborhood column not found in data")
 
-def create_area_price_by_neighborhood(train_data):
-    """Create scatter plot of living area vs price by neighborhood"""
-    print("Generating living area vs price by neighborhood plot...")
-    if 'GrLivArea' in train_data.columns and 'Neighborhood' in train_data.columns:
-        # Get top 9 neighborhoods by count
-        top_neighborhoods = train_data['Neighborhood'].value_counts().head(9).index
-        
-        # Filter data
-        filtered_data = train_data[train_data['Neighborhood'].isin(top_neighborhoods)]
-        
-        # Plot
-        plt.figure(figsize=(14, 10))
-        sns.scatterplot(
-            x='GrLivArea', 
-            y='SalePrice', 
-            hue='Neighborhood', 
-            data=filtered_data,
-            palette='tab10',
-            alpha=0.7
-        )
-        plt.title('Sale Price vs Living Area by Neighborhood', fontsize=16)
-        plt.xlabel('Above Ground Living Area (square feet)')
-        plt.ylabel('Sale Price ($)')
-        plt.legend(title='Neighborhood')
-        plt.tight_layout()
-        plt.savefig('visualizations/price_vs_area_by_neighborhood.png')
-        plt.close()
-        print("Living area vs price by neighborhood plot saved to visualizations/price_vs_area_by_neighborhood.png")
-    else:
-        print("GrLivArea or Neighborhood columns not found in data")
-
-def create_price_by_building_type(train_data):
-    """Create boxplot of price by building type"""
-    print("Generating price by building type plot...")
-    if 'BldgType' in train_data.columns:
-        plt.figure(figsize=(12, 8))
-        sns.boxplot(x='BldgType', y='SalePrice', data=train_data)
-        plt.title('House Price Distribution by Building Type', fontsize=16)
-        plt.xlabel('Building Type')
-        plt.ylabel('Sale Price ($)')
-        plt.tight_layout()
-        plt.savefig('visualizations/price_by_building_type.png')
-        plt.close()
-        print("Price by building type plot saved to visualizations/price_by_building_type.png")
-    else:
-        print("BldgType column not found in data")
-
 def run_all_visualizations(train_data):
     """Run all data visualizations"""
     create_correlation_heatmap(train_data)
     create_feature_scatter_plots(train_data)
     create_feature_distribution_plots(train_data)
-    create_price_by_age(train_data)
-    create_quality_condition_plot(train_data)
     create_neighborhood_comparison(train_data)
-    create_area_price_by_neighborhood(train_data)
-    create_price_by_building_type(train_data)
     
     print("\nAll data visualizations completed and saved to the 'visualizations' folder")
 

@@ -154,15 +154,5 @@ submission = pd.DataFrame({
 })
 submission.to_csv('submission.csv', index=False)
 
-# Generate additional model visualizations (uncomment to generate)
-# if ridge_val_rmse < rf_val_rmse:
-#     model_for_viz = best_model
-#     preds_for_viz = ridge_val_predictions
-# else:
-#     model_for_viz = rf_model
-#     preds_for_viz = rf_val_predictions
-#     mv.plot_partial_dependence(rf_model, X_train, numeric_features)
-#     
-# mv.plot_outlier_analysis(y_val, preds_for_viz)
 
 print("\nSubmission file created!")

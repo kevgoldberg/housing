@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.inspection import partial_dependence, PartialDependenceDisplay
+from sklearn.inspection import PartialDependenceDisplay
 import os
 
 # Make output directory if it doesn't exist
@@ -109,61 +109,3 @@ def plot_feature_importance(model, numeric_features):
     
     return feature_importance
 
-def plot_outlier_analysis(y_val, predictions):
-    """Analyze and visualize prediction outliers"""
-    print("Generating outlier visualization...")
-    # Calculate residuals and absolute residuals
-    residuals = y_val - predictions
-    abs_residuals = np.abs(residuals)
-    
-    # Get indices of top outliers
-    outlier_indices = np.argsort(abs_residuals)[-20:]  # Top 20 outliers
-    
-    # Create dataframe of outliers with actual and predicted values
-    outlier_df = pd.DataFrame({
-        'Actual': y_val.iloc[outlier_indices],
-        'Predicted': predictions[outlier_indices],
-        'Residual': residuals.iloc[outlier_indices],
-    })
-    
-    # Sort by absolute residual
-    outlier_df = outlier_df.sort_values('Residual', key=abs)
-    
-    # Plot
-    plt.figure(figsize=(12, 8))
-    indices = np.arange(len(outlier_df))
-    width = 0.4
-    
-    plt.bar(indices - width/2, outlier_df['Actual'], width, label='Actual')
-    plt.bar(indices + width/2, outlier_df['Predicted'], width, label='Predicted')
-    
-    plt.title('Top 20 Prediction Outliers: Actual vs Predicted Values', fontsize=16)
-    plt.xlabel('Outlier Index')
-    plt.ylabel('Sale Price ($)')
-    plt.legend()
-    plt.xticks([])  # Hide x-axis labels for cleaner look
-    plt.tight_layout()
-    plt.savefig('visualizations/prediction_outliers.png')
-    plt.close()
-    print("Outlier visualization saved to visualizations/prediction_outliers.png")
-
-def plot_partial_dependence(model, X_train, numeric_features):
-    """Create partial dependence plots to show relationships learned by the model"""
-    print("Generating partial dependence plots...")
-    try:
-        # Get feature importances
-        feature_importances = pd.Series(model.feature_importances_, index=numeric_features)
-        top_features = feature_importances.sort_values(ascending=False)[:6].index.tolist()
-        
-        # Create partial dependence plots directly using feature names
-        fig, ax = plt.subplots(2, 3, figsize=(18, 10))
-        PartialDependenceDisplay.from_estimator(
-            model, X_train, features=top_features[:6], 
-            ax=ax.flatten()
-        )
-        plt.tight_layout()
-        plt.savefig('visualizations/partial_dependence_plots.png')
-        plt.close()
-        print("Partial dependence plots saved to visualizations/partial_dependence_plots.png")
-    except Exception as e:
-        print(f"Error creating partial dependence plots: {e}")
