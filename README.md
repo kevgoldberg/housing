@@ -63,3 +63,15 @@ The `model_visualizations.py` module provides the following visualizations:
 - Random Forest Regression
 - Ridge Regression with hyperparameter tuning
 
+
+## Local Web Frontend
+
+A small Flask application is included to browse model metrics and the generated
+visualizations in your browser. After training a model (which creates
+`metrics.json` and images in the `visualizations` folder), run:
+
+```bash
+python webapp.py
+```
+
+Then open <http://localhost:5000> in a browser to view the dashboard.

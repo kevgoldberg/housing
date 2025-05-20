@@ -4,6 +4,8 @@ Model training, evaluation, and inference
 import numpy as np
 from sklearn.model_selection import train_test_split
 from config import SEED
+import json
+import os
 from housing.data import load_data, preprocess_numeric
 from housing.visualization.runner import run_model_visualizations
 from housing.models.random_forest import train_and_evaluate_rf
@@ -24,6 +26,15 @@ def train_and_evaluate(test_size=0.2):
     # Ridge with normalization & grid search
     best_ridge, ridge_pred, ridge_rmse = train_and_evaluate_ridge(X_train, y_train, X_val, y_val)
 
+    # Save evaluation metrics
+    metrics = {
+        "RandomForest_RMSE": float(rf_rmse),
+        "Ridge_RMSE": float(ridge_rmse),
+        "BestModel": "Ridge" if ridge_rmse < rf_rmse else "RandomForest",
+    }
+    with open("metrics.json", "w") as f:
+        json.dump(metrics, f, indent=2)
+
     # Visualize
     run_model_visualizations(
         y_val,
@@ -34,16 +45,16 @@ def train_and_evaluate(test_size=0.2):
         rf,
         best_ridge,  # Use the best ridge estimator
         X_train_all,
-        numeric_features
+        numeric_features,
     )
 
     # Choose final model
     final = best_ridge if ridge_rmse < rf_rmse else rf
-    return final, X_test
+    return final, X_test, metrics
 
 
 def main():
-    model, X_test = train_and_evaluate()
+    model, X_test, metrics = train_and_evaluate()
     preds = model.predict(X_test)
     import pandas as pd
     from config import TEST_PATH
@@ -51,6 +62,8 @@ def main():
     submission = pd.DataFrame({'Id': test_df['Id'], 'SalePrice': preds})
     submission.to_csv('submission.csv', index=False)
     print("Submission saved to submission.csv")
+    if os.path.exists("metrics.json"):
+        print("Metrics written to metrics.json")
 
 
 if __name__ == '__main__':
