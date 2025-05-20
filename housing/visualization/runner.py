@@ -11,8 +11,35 @@ from housing.visualization.model import (
     plot_residuals_distribution,
     plot_feature_importance,
     plot_partial_dependence,
-    plot_outliers
+    plot_outliers,
 )
+
+
+def run_model_visualizations(
+    y_val,
+    rf_pred,
+    ridge_pred,
+    rf_rmse,
+    ridge_rmse,
+    rf_model,
+    ridge_model,
+    X_train,
+    numeric_features,
+):
+    """Generate all model visualizations for a validation set."""
+    plot_saleprice_distribution(pd.DataFrame({"SalePrice": y_val}))
+    rf_res, ridge_res = plot_prediction_comparison(y_val, rf_pred, ridge_pred)
+    plot_residuals_distribution(rf_res, ridge_res, rf_rmse, ridge_rmse)
+    if rf_rmse <= ridge_rmse:
+        best_pred = rf_pred
+        best_model = rf_model
+    else:
+        best_pred = ridge_pred
+        best_model = ridge_model
+    if hasattr(best_model, "feature_importances_"):
+        plot_feature_importance(best_model, numeric_features)
+        plot_partial_dependence(best_model, X_train, numeric_features)
+    plot_outliers(y_val, best_pred)
 
 @click.group()
 @click.pass_context
