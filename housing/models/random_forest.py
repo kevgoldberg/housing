@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
-from housing.config import SEED
+from config import SEED
 
 def train_and_evaluate_rf(X_train, y_train, X_val, y_val):
     """

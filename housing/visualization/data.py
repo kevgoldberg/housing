@@ -6,10 +6,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from housing.config import VIS_DIR
+from config import VIS_DIR
 
 # Ensure visualization directory exists
-ios.makedirs(VIS_DIR, exist_ok=True)
+os.makedirs(VIS_DIR, exist_ok=True)
 
 def create_correlation_heatmap(train_data):
     """Generate and save a correlation heatmap of top numeric features."""
