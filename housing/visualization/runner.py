@@ -11,8 +11,39 @@ from housing.visualization.model import (
     plot_residuals_distribution,
     plot_feature_importance,
     plot_partial_dependence,
-    plot_outliers
+    plot_outliers,
 )
+
+
+def run_model_visualizations(
+    y_val,
+    rf_pred,
+    ridge_pred,
+    rf_rmse,
+    ridge_rmse,
+    rf_model,
+    ridge_model,
+    X_train,
+    numeric_features,
+):
+    """Generate and save all model-related visualizations."""
+
+    # Base visualizations comparing both models
+    plot_saleprice_distribution(pd.DataFrame({"SalePrice": y_val}))
+    rf_res, ridge_res = plot_prediction_comparison(y_val, rf_pred, ridge_pred)
+    plot_residuals_distribution(rf_res, ridge_res, rf_rmse, ridge_rmse)
+
+    # Determine which model performed better
+    best_model = ridge_model if ridge_rmse < rf_rmse else rf_model
+    best_pred = ridge_pred if ridge_rmse < rf_rmse else rf_pred
+
+    # Feature importance and PDP only make sense for models with the attribute
+    if hasattr(best_model, "feature_importances_"):
+        plot_feature_importance(best_model, numeric_features)
+        plot_partial_dependence(best_model, X_train, numeric_features)
+
+    # Outlier analysis for the chosen model
+    plot_outliers(y_val, best_pred)
 
 @click.group()
 @click.pass_context
