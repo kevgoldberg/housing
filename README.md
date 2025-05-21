@@ -29,10 +29,12 @@ python main.py
 python visualization_runner.py
 ```
 
-4. Launch the simple local front end (requires Tkinter, included with Python):
+4. Launch the simple local front end (requires Tkinter and a display server):
 ```bash
 python local_frontend.py
 ```
+If no display is available, the script will exit with a message indicating that
+the `DISPLAY` environment variable is missing.
 
 ## Data Visualization Functions
 
